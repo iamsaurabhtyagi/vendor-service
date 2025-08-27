@@ -1,0 +1,7 @@
+CREATE TABLE vendor_facilities (
+    id CHAR(36) PRIMARY KEY,
+    vendor_id CHAR(36) NOT NULL,
+    facility VARCHAR(100) NOT NULL, -- 'PARKING','AC','OUTDOOR_SEATING','INDOOR_SEATING','WIFI','WASHROOMS','LIVE_MUSIC','DJ','BAR','OTHER'
+
+    FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE
+);
