@@ -8,6 +8,8 @@ CREATE TABLE vendors (
     phone VARCHAR(20),
     email VARCHAR(100),
 
+    status VARCHAR(20),
+
     capacity_min INT,
     capacity_max INT,
 
