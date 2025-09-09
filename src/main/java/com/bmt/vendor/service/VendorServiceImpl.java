@@ -4,8 +4,10 @@ import com.bmt.vendor.converter.VendorConverter;
 import com.bmt.vendor.dao.VendorDao;
 import com.bmt.vendor.view.request.VendorRequest;
 import com.bmt.vendor.view.response.VendorResponse;
+import com.common.exception.InvalidVendorException;
 import com.common.exception.VendorNotFoundException;
 import com.common.model.vendor.Vendor;
+import com.common.model.vendor.VendorStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,19 +21,24 @@ public class VendorServiceImpl implements VendorService {
         this.vendorDao = vendorDao;
     }
     @Override
-    public VendorResponse create(VendorRequest vendorRequest) {
+    public VendorResponse create(UUID userId, VendorRequest vendorRequest) {
         Vendor vendor = VendorConverter.requestToEntityVendor(null, vendorRequest);
 
+        vendor.setUserId(userId);
         vendor = vendorDao.save(vendor);
 
         return VendorConverter.entityToResponseVendor(vendor);
     }
 
     @Override
-    public VendorResponse update(UUID vendorId, VendorRequest vendorRequest) {
+    public VendorResponse update(UUID vendorId, UUID userId, VendorRequest vendorRequest) {
         Vendor vendor = getVendor(vendorId);
 
+        if(!userId.equals(vendor.getUserId()))
+            throw new InvalidVendorException("Vendor and User doesn't match");
+
         vendor = VendorConverter.requestToEntityVendor(vendor, vendorRequest);
+
         vendor = vendorDao.save(vendor);
 
         return VendorConverter.entityToResponseVendor(vendor);
@@ -46,7 +53,12 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public String delete(UUID vendorId) {
-        return null;
+        Vendor vendor = getVendor(vendorId);
+
+        vendor.setVendorStatus(VendorStatus.INACTIVE);
+        vendor = vendorDao.save(vendor);
+
+        return "Vendor Deleted Successfully";
     }
 
     private Vendor getVendor(UUID vendorId) {

@@ -3,11 +3,14 @@ package com.bmt.vendor.converter;
 import com.bmt.vendor.view.request.VendorRequest;
 import com.bmt.vendor.view.response.VendorResponse;
 import com.common.model.vendor.Vendor;
+import com.common.model.vendor.VendorStatus;
 
 public class VendorConverter {
     public static Vendor requestToEntityVendor(Vendor vendor, VendorRequest vendorRequest) {
         if(vendor == null)
             vendor = new Vendor();
+
+        vendor.setVendorStatus(VendorStatus.ACTIVE);
 
         if(vendorRequest.getName() != null)
             vendor.setName(vendorRequest.getName());

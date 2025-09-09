@@ -7,8 +7,8 @@ import com.common.model.vendor.Vendor;
 import java.util.UUID;
 
 public interface VendorService {
-    VendorResponse create(VendorRequest vendorRequest);
-    VendorResponse update(UUID vendorId, VendorRequest vendorRequest);
+    VendorResponse create(UUID userId, VendorRequest vendorRequest);
+    VendorResponse update(UUID vendorId, UUID userId, VendorRequest vendorRequest);
     VendorResponse read(UUID vendorId);
     String delete(UUID vendorId);
 
