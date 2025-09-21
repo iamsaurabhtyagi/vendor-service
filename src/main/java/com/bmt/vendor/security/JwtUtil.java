@@ -1,13 +1,17 @@
 package com.bmt.vendor.security;
 
+import com.bmt.vendor.view.response.UserResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtUtil {
@@ -52,5 +56,19 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         return !isTokenExpired(token);
+    }
+
+    public UserResponse getUserDetails() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<String, Object> claims = jwt.getClaims();
+        UserResponse user = new UserResponse();
+
+        user.setUsername(jwt.getSubject());
+        user.setUserId((String) claims.get("userId"));
+        user.setUserType((String) claims.get("userType"));
+        user.setUserCategory((String) claims.get("userCategory"));
+        user.setActive((Boolean) claims.get("active"));
+
+        return user;
     }
 }

@@ -1,6 +1,7 @@
 CREATE TABLE vendors (
     id CHAR(36) PRIMARY KEY,
     user_id CHAR(36) NOT NULL, -- user-service DB
+    vendor_type VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     logo_url VARCHAR(500),
