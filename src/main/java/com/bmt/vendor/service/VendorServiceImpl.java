@@ -2,7 +2,9 @@ package com.bmt.vendor.service;
 
 import com.bmt.vendor.converter.VendorConverter;
 import com.bmt.vendor.dao.VendorDao;
+import com.bmt.vendor.security.JwtUtil;
 import com.bmt.vendor.view.request.VendorRequest;
+import com.bmt.vendor.view.response.UserResponse;
 import com.bmt.vendor.view.response.VendorResponse;
 import com.common.exception.InvalidVendorException;
 import com.common.exception.VendorNotFoundException;
@@ -15,16 +17,19 @@ import java.util.UUID;
 @Service
 public class VendorServiceImpl implements VendorService {
 
+    private final JwtUtil jwtUtil;
     private final VendorDao vendorDao;
 
-    public VendorServiceImpl(VendorDao vendorDao) {
+    public VendorServiceImpl(JwtUtil jwtUtil, VendorDao vendorDao) {
+        this.jwtUtil = jwtUtil;
         this.vendorDao = vendorDao;
     }
     @Override
     public VendorResponse create(UUID userId, VendorRequest vendorRequest) {
         Vendor vendor = VendorConverter.requestToEntityVendor(null, vendorRequest);
+        UserResponse userResponse = jwtUtil.getUserDetails();
 
-        vendor.setUserId(userId);
+        vendor.setUserId(userResponse.getUserId());
         vendor = vendorDao.save(vendor);
 
         return VendorConverter.entityToResponseVendor(vendor);

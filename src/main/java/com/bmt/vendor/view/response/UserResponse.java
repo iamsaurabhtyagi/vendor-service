@@ -2,9 +2,11 @@ package com.bmt.vendor.view.response;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class UserResponse {
-    private String userId;
+    private UUID userId;
     private String username;
     private String userType;
     private String userCategory;

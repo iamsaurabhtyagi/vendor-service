@@ -5,6 +5,7 @@ import com.bmt.vendor.view.request.VendorRequest;
 import com.bmt.vendor.view.response.VendorResponse;
 import com.common.response.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,13 @@ public class VendorController {
         this.vendorService = vendorService;
     }
 
-    @PostMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<VendorResponse>> create(@PathVariable UUID userId,
-                                                              @Valid @RequestBody VendorRequest vendorRequest) {
-        VendorResponse response = vendorService.create(userId, vendorRequest);
+    @GetMapping
+    public String greet() {
+        return "Hello Vendor";
+    }
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<VendorResponse>> create(@Valid @RequestBody VendorRequest vendorRequest) {
+        VendorResponse response = vendorService.create(null, vendorRequest);
         return ResponseEntity.ok(ApiResponse.success("Created", response));
     }
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -59,12 +60,12 @@ public class JwtUtil {
     }
 
     public UserResponse getUserDetails() {
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Map<String, Object> claims = jwt.getClaims();
+        Map<String, Object> claims =
+                (Map<String, Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserResponse user = new UserResponse();
 
-        user.setUsername(jwt.getSubject());
-        user.setUserId((String) claims.get("userId"));
+        user.setUsername((String) claims.get("username"));
+        user.setUserId(UUID.fromString((String) claims.get("userId")));
         user.setUserType((String) claims.get("userType"));
         user.setUserCategory((String) claims.get("userCategory"));
         user.setActive((Boolean) claims.get("active"));

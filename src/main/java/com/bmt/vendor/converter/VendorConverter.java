@@ -4,6 +4,7 @@ import com.bmt.vendor.view.request.VendorRequest;
 import com.bmt.vendor.view.response.VendorResponse;
 import com.common.model.vendor.Vendor;
 import com.common.model.vendor.VendorStatus;
+import com.common.model.vendor.VendorType;
 
 public class VendorConverter {
     public static Vendor requestToEntityVendor(Vendor vendor, VendorRequest vendorRequest) {
@@ -11,6 +12,9 @@ public class VendorConverter {
             vendor = new Vendor();
 
         vendor.setVendorStatus(VendorStatus.ACTIVE);
+
+        if(vendorRequest.getVendorType() != null)
+            vendor.setVendorType(vendorRequest.getVendorType());
 
         if(vendorRequest.getName() != null)
             vendor.setName(vendorRequest.getName());
