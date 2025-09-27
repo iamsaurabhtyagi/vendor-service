@@ -2,6 +2,7 @@ package com.bmt.vendor.config;
 
 import com.bmt.vendor.filter.JwtAuthenticationFilter;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,8 @@ public class SecurityConfig {
     private static final String SECRET_KEY = "your-secret-key-saurabh-kumar-tyagi-140288";
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthEntryPoint customAuthEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,7 +49,12 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // all others require JWT
                 )
                 // register your filter before UsernamePasswordAuthenticationFilter
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                );
 
         return http.build();
     }

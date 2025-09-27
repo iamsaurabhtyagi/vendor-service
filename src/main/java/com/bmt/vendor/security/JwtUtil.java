@@ -1,5 +1,7 @@
 package com.bmt.vendor.security;
 
+import com.common.exception.InvalidJwtSignatureException;
+import com.common.exception.InvalidJwtTokenException;
 import com.common.security.UserContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -43,9 +45,9 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException e) {
-            throw new RuntimeException("Invalid JWT Signature", e);
+            throw new InvalidJwtSignatureException("Invalid JWT Signature");
         } catch (Exception e) {
-            throw new RuntimeException("Invalid JWT Token", e);
+            throw new InvalidJwtTokenException("Invalid JWT Token");
         }
     }
 

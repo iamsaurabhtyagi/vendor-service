@@ -13,4 +13,5 @@ public class MenuRequest {
     private String name;
     private String description;
     private BigDecimal price;
+    private Boolean available;
 }

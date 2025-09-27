@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/v1/menu")
 public class MenuController {
@@ -17,9 +19,17 @@ public class MenuController {
         this.menuService = menuService;
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse<MenuResponse>> create(@Valid @RequestBody MenuRequest menuRequest) {
-        MenuResponse response = menuService.create(menuRequest);
-        return ResponseEntity.ok(ApiResponse.success("Created", response));
+    @PostMapping("/{vendorId}")
+    public ResponseEntity<ApiResponse<MenuResponse>> create(@PathVariable UUID vendorId,
+                                                            @Valid @RequestBody MenuRequest menuRequest) {
+        MenuResponse response = menuService.create(vendorId, menuRequest);
+        return ResponseEntity.ok(ApiResponse.success("Menu Item Created", response));
+    }
+
+    @PutMapping("/{menuItemId}")
+    public ResponseEntity<ApiResponse<MenuResponse>> update(@PathVariable UUID menuItemId,
+                                                            @Valid @RequestBody MenuRequest menuRequest) {
+        MenuResponse response = menuService.update(menuItemId, menuRequest);
+        return ResponseEntity.ok(ApiResponse.success("Menu Item Updated", response));
     }
 }

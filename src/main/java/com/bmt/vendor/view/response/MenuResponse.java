@@ -6,14 +6,16 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class MenuResponse {
+    private UUID id;
     private MenuCategory category;
     private CuisineType cuisineType;
     private String name;
     private String description;
     private BigDecimal price;
-    private Boolean isAvailable = true;
+    private boolean available = true;
     private LocalDateTime createdAt;
 }

@@ -1,5 +1,7 @@
 package com.bmt.vendor.advice;
 
+import com.common.exception.InvalidJwtSignatureException;
+import com.common.exception.InvalidJwtTokenException;
 import com.common.exception.InvalidVendorException;
 import com.common.exception.VendorNotFoundException;
 import com.common.response.ApiResponse;
@@ -14,6 +16,22 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(InvalidJwtSignatureException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidJwtSignatureException(InvalidJwtSignatureException ex, HttpServletRequest request) {
+        Map<String, String> errorDetails = Map.of("reason", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.failure("Invalid Signature", errorDetails, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidJwtTokenException(InvalidJwtTokenException ex, HttpServletRequest request) {
+        Map<String, String> errorDetails = Map.of("reason", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(ApiResponse.failure("Invalid Token", errorDetails, request.getRequestURI()));
+    }
 
     @ExceptionHandler(VendorNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleVendorNotFoundException(VendorNotFoundException ex, HttpServletRequest request) {
