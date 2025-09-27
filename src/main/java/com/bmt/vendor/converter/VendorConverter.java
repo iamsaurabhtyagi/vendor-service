@@ -5,6 +5,9 @@ import com.bmt.vendor.view.response.VendorResponse;
 import com.common.model.vendor.Vendor;
 import com.common.model.vendor.VendorStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VendorConverter {
     public static Vendor requestToEntityVendor(Vendor vendor, VendorRequest vendorRequest) {
         if(vendor == null)
@@ -42,6 +45,7 @@ public class VendorConverter {
     public static VendorResponse entityToResponseVendor(Vendor vendor) {
         VendorResponse vendorResponse = new VendorResponse();
 
+        vendorResponse.setId(vendor.getId());
         vendorResponse.setName(vendor.getName());
         vendorResponse.setEmail(vendor.getEmail());
         vendorResponse.setPhone(vendor.getPhone());
@@ -51,5 +55,11 @@ public class VendorConverter {
         vendorResponse.setCapacityMax(vendor.getCapacityMax());
 
         return vendorResponse;
+    }
+
+    public static List<VendorResponse> entityToResponseVendorList(List<Vendor> activeVendors) {
+        return activeVendors.stream()
+                .map(VendorConverter::entityToResponseVendor)
+                .toList();
     }
 }

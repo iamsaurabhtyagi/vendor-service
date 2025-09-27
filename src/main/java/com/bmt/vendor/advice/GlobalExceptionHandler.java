@@ -1,5 +1,7 @@
 package com.bmt.vendor.advice;
 
+import com.common.exception.InvalidVendorException;
+import com.common.exception.VendorNotFoundException;
 import com.common.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,22 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(VendorNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleVendorNotFoundException(VendorNotFoundException ex, HttpServletRequest request) {
+        Map<String, String> errorDetails = Map.of("reason", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.failure("Vendor not Found", errorDetails, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(InvalidVendorException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidVendorException(InvalidVendorException ex, HttpServletRequest request) {
+        Map<String, String> errorDetails = Map.of("reason", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.failure("Invalid Vendor", errorDetails, request.getRequestURI()));
+    }
 
     /**
      * Method to handle incorrect arguments received in request body using validation framework
