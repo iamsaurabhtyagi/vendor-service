@@ -61,11 +61,8 @@ public class JwtUtil {
     }
 
     public UserContext getUserDetails() {
-        //Map<String, Object> claims = (Map<String, Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = (String) auth.getPrincipal();
-        Map<String, Object> claims = (Map<String, Object>) auth.getDetails();
+        Map<String, Object> claims = (Map<String, Object>) auth.getPrincipal();
 
         UserContext userContext = new UserContext();
         userContext.setUsername((String) claims.get("username"));
