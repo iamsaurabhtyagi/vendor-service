@@ -1,10 +1,11 @@
 package com.bmt.vendor.security;
 
-import com.bmt.vendor.view.response.UserResponse;
+import com.common.security.UserContext;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,6 @@ public class JwtUtil {
     private static final String SECRET_KEY = "your-secret-key-saurabh-kumar-tyagi-140288";
 
     private Key getSignKey() {
-        //byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
@@ -58,17 +58,20 @@ public class JwtUtil {
         return !isTokenExpired(token);
     }
 
-    public UserResponse getUserDetails() {
-        Map<String, Object> claims =
-                (Map<String, Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserResponse user = new UserResponse();
+    public UserContext getUserDetails() {
+        //Map<String, Object> claims = (Map<String, Object>) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        user.setUsername((String) claims.get("username"));
-        user.setUserId(UUID.fromString((String) claims.get("userId")));
-        user.setUserType((String) claims.get("userType"));
-        user.setUserCategory((String) claims.get("userCategory"));
-        user.setActive((Boolean) claims.get("active"));
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) auth.getPrincipal();
+        Map<String, Object> claims = (Map<String, Object>) auth.getDetails();
 
-        return user;
+        UserContext userContext = new UserContext();
+        userContext.setUsername((String) claims.get("username"));
+        userContext.setUserId(UUID.fromString((String) claims.get("userId")));
+        userContext.setUserType((String) claims.get("userType"));
+        userContext.setUserCategory((String) claims.get("userCategory"));
+        userContext.setActive((Boolean) claims.get("active"));
+
+        return userContext;
     }
 }

@@ -4,12 +4,12 @@ import com.bmt.vendor.converter.VendorConverter;
 import com.bmt.vendor.dao.VendorDao;
 import com.bmt.vendor.security.JwtUtil;
 import com.bmt.vendor.view.request.VendorRequest;
-import com.bmt.vendor.view.response.UserResponse;
 import com.bmt.vendor.view.response.VendorResponse;
 import com.common.exception.InvalidVendorException;
 import com.common.exception.VendorNotFoundException;
 import com.common.model.vendor.Vendor;
 import com.common.model.vendor.VendorStatus;
+import com.common.security.UserContext;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -27,9 +27,9 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public VendorResponse create(UUID userId, VendorRequest vendorRequest) {
         Vendor vendor = VendorConverter.requestToEntityVendor(null, vendorRequest);
-        UserResponse userResponse = jwtUtil.getUserDetails();
+        UserContext userContext = jwtUtil.getUserDetails();
 
-        vendor.setUserId(userResponse.getUserId());
+        vendor.setUserId(userContext.getUserId());
         vendor = vendorDao.save(vendor);
 
         return VendorConverter.entityToResponseVendor(vendor);

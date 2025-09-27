@@ -5,8 +5,8 @@ import com.bmt.vendor.security.JwtUtil;
 import com.bmt.vendor.util.converter.MenuConverter;
 import com.bmt.vendor.view.request.MenuRequest;
 import com.bmt.vendor.view.response.MenuResponse;
-import com.bmt.vendor.view.response.UserResponse;
 import com.common.model.vendor.MenuItem;
+import com.common.security.UserContext;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuResponse create(MenuRequest menuRequest) {
         MenuItem menuItem = MenuConverter.requestToEntity(menuRequest);
-        UserResponse userResponse = jwtUtil.getUserDetails();
+        UserContext userContext = jwtUtil.getUserDetails();
         return null;
     }
 
